@@ -34,8 +34,10 @@ jobs:
         echo "SECRET_KEY=ci-secret-key" >> .env
         echo "FLASK_PORT=5000" >> .env
         echo "FLASK_HOST=0.0.0.0" >> .env
+        echo "CONFLICT_MODEL_PATH=backend/models/conflict_detector.onnx" >> .env
+        echo "DELAY_MODEL_PATH=backend/models/delay_predictor.onnx" >> .env
 
-        python backend/flask_app.py > flask_output.log 2>&1 &
+        python backend/api/main.py > fastapi_output.log 2>&1 &
 
         max_attempts=30
         attempt=0
@@ -60,4 +62,4 @@ jobs:
     - name: Cleanup
       if: always()
       run: |
-        pkill -f "python backend/flask_app.py" || true
+        pkill -f "python backend/api/main.py" || true
